@@ -1,5 +1,6 @@
-package org.example;
+package org.example.services;
 
+import org.example.services.Crawler;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,11 +10,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PoliceCrawler implements Crawler {
+public class CrawlerServiceImpl implements Crawler {
 
-    private static final String ROOT_URL = "https://www.police.hu/hu/koral/elfogatoparancs-alapjan-korozott-szemelyek";
-
-    private static final String CLASS_NAME = "overlay";
+    public CrawlerServiceImpl() {
+    }
 
     @Override
     public Document crawl(String url) {
