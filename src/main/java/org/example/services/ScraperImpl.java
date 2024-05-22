@@ -1,5 +1,6 @@
 package org.example.services;
 
+import org.example.models.Suspect;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -9,7 +10,11 @@ import java.util.List;
 
 public class ScraperImpl implements Scraper {
 
-    private static final String DETAIL_BEGINNING = "Körözés jogalapja, bűncselekmény megnevezése, minősítése";
+    private static final String CRIME_DETAIL_BEGINNING = "Körözés jogalapja, bűncselekmény megnevezése, minősítése";
+
+    private static final String SURNAME_DETAIL_BEGINNING = "Viselt vezetéknév";
+
+    private static final String FIRSTNAME_DETAIL_BEGINNING = "Viselt utónév 1";
 
     private static final String CLASS_NAME = "overlay";
 
@@ -22,23 +27,74 @@ public class ScraperImpl implements Scraper {
         return listOfUrls;
     }
 
-    @Override
-    public void scrapeCrimes(Document doc, List<String> crimes) {
-         getCrime(getMetaTag(doc),crimes);
+    public void scrapeCrimesAndSuspects(Document doc, List<String> crimes, List<Suspect> suspects) {
+        Element metaTag = getMetaTag(doc);
+        String crime = getCrime(metaTag);
+        addCrimeToList(crime,crimes);
+        String surName = getName(metaTag,SURNAME_DETAIL_BEGINNING);
+        String firstName = getName(metaTag,FIRSTNAME_DETAIL_BEGINNING);
+        System.out.println(surName + "" + firstName);
+//        suspects.add(
+//                SuspectBuilder.builder()
+//                        .crime(crime)
+//                        .surName(getName(metaTag, SURNAME_DETAIL_BEGINNING))
+//                        .firstName(getName(metaTag, FIRSTNAME_DETAIL_BEGINNING))
+//                        .imgURL()
+//                        .build();
+//        )
     }
 
-    private void getCrime (Element metaTag, List<String> crimes) {
-        if (metaTag != null) {
-            String content = metaTag.attr("content");
-            String[] details = content.split(";");
-            for (String detail : details) {
-                if (detail.startsWith(DETAIL_BEGINNING)) {
-                    addCrimeToList(detail.split(": ", 2)[1],crimes);
-                }
+    private String[] getDescriptionContentDetails(Element metaTag) {
+        if (metaTag == null) {
+            throw new RuntimeException("Meta tag not found");
+        }
+        String content = metaTag.attr("content");
+        return content.split(";");
+    }
+
+    private String getName(Element metaTag, String nameDetail) {
+        return extractNameFromDetails(getDescriptionContentDetails(metaTag),nameDetail);
+    }
+
+    private String extractNameFromDetails(String[] details, String nameDetail) {
+        for (String detail : details) {
+
+            if (detail.startsWith(nameDetail)) {
+                return extractName(detail);
             }
         }
         throw new RuntimeException("Crime not found");
     }
+
+    private String extractName(String detail) {
+        String[] parts = detail.split(":", 2);
+        if (parts.length > 1) {
+            return parts[1];
+        }
+        throw new RuntimeException("Name detail format is incorrect");
+    }
+
+    private String getCrime(Element metaTag) {
+        return extractCrimeFromDetails(getDescriptionContentDetails(metaTag));
+    }
+
+    private String extractCrimeFromDetails(String[] details) {
+        for (String detail : details) {
+            if (detail.startsWith(CRIME_DETAIL_BEGINNING)) {
+                return extractCrime(detail);
+            }
+        }
+        throw new RuntimeException("Crime not found");
+    }
+
+    private String extractCrime(String detail) {
+        String[] parts = detail.split(": ", 2);
+        if (parts.length > 1) {
+            return parts[1].split("-", 2)[0];
+        }
+        throw new RuntimeException("Crime detail format is incorrect");
+    }
+
 
     private void addCrimeToList(String crime, List<String> crimes) {
         crimes.add(crime);

@@ -16,6 +16,12 @@ public class Main {
         List<Suspect> suspects = new ArrayList<>();
         List<String> crimes = new ArrayList<>();
         crawlAndScraper.crawlAndScrape(suspects, crimes);
+        for (String c : crimes) {
+            System.out.println(c + "\n");
+        }
+
+
+
 //
 //        try {
 //            Document document = Jsoup.connect("https://www.police.hu/hu/koral/elfogatoparancs-alapjan-korozott-szemelyek").get();
