@@ -31,17 +31,27 @@ public class ScraperImpl implements Scraper {
         Element metaTag = getMetaTag(doc);
         String crime = getCrime(metaTag);
         addCrimeToList(crime,crimes);
-        String surName = getName(metaTag,SURNAME_DETAIL_BEGINNING);
-        String firstName = getName(metaTag,FIRSTNAME_DETAIL_BEGINNING);
-        System.out.println(surName + "" + firstName);
-//        suspects.add(
-//                SuspectBuilder.builder()
-//                        .crime(crime)
-//                        .surName(getName(metaTag, SURNAME_DETAIL_BEGINNING))
-//                        .firstName(getName(metaTag, FIRSTNAME_DETAIL_BEGINNING))
-//                        .imgURL()
-//                        .build();
-//        )
+        addSuspectToList(doc,metaTag,crime,suspects);
+    }
+
+    private void addSuspectToList(Document doc,Element metaTag, String crime, List<Suspect> suspects) {
+        suspects.add(
+                SuspectBuilder.builder()
+                        .crime(crime)
+                        .surName(getName(metaTag, SURNAME_DETAIL_BEGINNING))
+                        .firstName(getName(metaTag, FIRSTNAME_DETAIL_BEGINNING))
+                        .imgURL(getImageUrl(doc))
+                        .build());
+    }
+
+    private Element getImageElement(Document doc) {
+       return doc.select("a#thumb-image img").first();
+
+    }
+
+    private String getImageUrl(Document doc) {
+        Element imgElement = getImageElement(doc);
+        return (imgElement != null) ? imgElement.attr("src") : null;
     }
 
     private String[] getDescriptionContentDetails(Element metaTag) {
