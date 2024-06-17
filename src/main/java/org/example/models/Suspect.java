@@ -41,6 +41,16 @@ public class Suspect {
         this.crime = crime;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Suspect suspect = (Suspect) o;
+        return this.crime.equals(suspect.crime) && this.firstName.equals(suspect.firstName);
+    }
+
     private String firstName;
 
     private String surName;

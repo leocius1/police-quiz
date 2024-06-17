@@ -1,16 +1,14 @@
 package org.example.services;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class CrimeListManagerImpl implements CrimeListManager {
+public class CrimeListManagerImpl implements ListManager<String> {
     @Override
-    public void removeRepeatedCrimes(List<String> crimes) {
-       for (int i = 0; i < crimes.size(); i++) {
-           for (int j = i+1; j < crimes.size(); j++) {
-               if (crimes.get(i).equals(crimes.get(j))) {
-                   crimes.remove(crimes.get(i));
-               }
-           }
-       }
+    public List<String> removeDuplicates(List<String> crimes) {
+        Set<String> uniqueCrimes = new HashSet<>(crimes);
+        return new ArrayList<>(uniqueCrimes);
     }
 }
