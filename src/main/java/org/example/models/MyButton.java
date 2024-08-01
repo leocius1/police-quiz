@@ -8,6 +8,5 @@ public class MyButton extends JButton {
         this.setSize(100,100);
         this.setBackground(Color.CYAN);
         this.setText(crime);
-
     }
 }

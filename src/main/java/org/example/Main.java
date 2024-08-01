@@ -19,7 +19,6 @@ public class Main {
         List<Suspect> suspects = new ArrayList<>();
         List<String> crimes = new ArrayList<>();
         crawlAndScraper.crawlAndScrape(suspects, crimes);
-
         suspectListManager.deleteSuspectsWithoutImg(suspects);
         crimes = crimeListManager.removeDuplicates(crimes);
         suspects = suspectListManager.removeDuplicates(suspects);
@@ -27,7 +26,6 @@ public class Main {
 
         Game game = new Game(suspects,crimes);
 
-        System.out.println("hi");
     }
 
 }
