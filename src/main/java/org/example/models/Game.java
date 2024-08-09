@@ -7,7 +7,7 @@ public class Game {
     public Game(List<Suspect> suspects, List<String> crimes) {
         logic = new GameLogic(crimes, suspects);
         frame = new GameFrame();
-        prepareScreenData();
+        startGame();
     }
 
     public static GameFrame getFrame() {
@@ -34,7 +34,7 @@ public class Game {
         Game.score = score;
     }
 
-    public static void prepareScreenData() {
+    public static void startGame() {
         
         Suspect suspect = logic.getRandomSuspect();
         String trueCrime = suspect.getCrime();
@@ -58,6 +58,7 @@ public class Game {
                 .trueButton(suspect, score)
                 .suspectPicture(imageUrl)
                 .suspectName(suspectName)
+                .score(score[0])
                 .build();
 
         frame.add(gameScreen);

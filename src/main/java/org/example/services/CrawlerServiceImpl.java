@@ -19,7 +19,7 @@ public class CrawlerServiceImpl implements Crawler {
         try {
             return Jsoup.connect(url).get();
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
+            return null;
         }
     }
 }

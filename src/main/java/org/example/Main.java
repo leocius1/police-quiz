@@ -22,10 +22,7 @@ public class Main {
         suspectListManager.deleteSuspectsWithoutImg(suspects);
         crimes = crimeListManager.removeDuplicates(crimes);
         suspects = suspectListManager.removeDuplicates(suspects);
-
-
         Game game = new Game(suspects,crimes);
-
     }
 
 }
